@@ -58,6 +58,7 @@ function start() {
           break;
         case mainPrompt.addDepartment:
           // run function
+          addDepartment();
           break;
         case mainPrompt.addRole:
           // run function
@@ -80,12 +81,47 @@ function start() {
 
 start();
 
+function addDepartment() {
+  inquirer
+    .prompt([
+      {
+        name: "department",
+        type: "input",
+        message: "Enter the name of the department (required)",
+      },
+      {
+        name: "managerFirstName",
+        type: "input",
+        message: "What is the manager's first name? (required)",
+      },
+      {
+        name: "managerLastName",
+        type: "input",
+        message: "What is the manager's last name? (required)",
+      },
+    ])
+    .then((answers) => {
+      console.log(answers);
+      const sql = `INSERT INTO department (department_name, manager_f_name, manager_l_name)
+                    VALUES (?,?,?);
+                    ;`;
+      const params = [answers.department, answers.managerFirstName, answers.managerLastName];
+      db.query(sql, params, (err, rows) => {
+        // console.log(`
+        //   VIEWING ALL DEPARTMENTS:
+        // `);
+        // console.table(rows);
+      });
+    })
+    .then(start);
+}
+
 function viewAllDepartments() {
   const sql = `SELECT id, department_name FROM department`;
   db.query(sql, (err, rows) => {
     console.log(`
       VIEWING ALL DEPARTMENTS:
-    `)
+    `);
     console.table(rows);
   });
 }
@@ -98,7 +134,7 @@ function viewAllRoles() {
   db.query(sql, (err, rows) => {
     console.log(`
       VIEWING ALL ROLES:
-    `)
+    `);
     console.table(rows);
   });
 }
@@ -114,7 +150,7 @@ function viewAllEmployees() {
   db.query(sql, (err, rows) => {
     console.log(`
       VIEWING ALL EMPLOYEES:
-    `)
+    `);
     console.table(rows);
   });
 }
@@ -156,4 +192,3 @@ db.connect((err) => {
   if (err) throw err;
   console.log("Database connected");
 });
-
