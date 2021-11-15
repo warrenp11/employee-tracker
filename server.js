@@ -62,6 +62,7 @@ function start() {
           break;
         case mainPrompt.addRole:
           // run function
+          addRole();
           break;
         case mainPrompt.addEmployee:
           // run function
@@ -80,6 +81,8 @@ function start() {
 }
 
 start();
+
+// FUNCTIONS BELOW HERE
 
 function addDepartment() {
   inquirer
@@ -106,12 +109,37 @@ function addDepartment() {
                     VALUES (?,?,?);
                     ;`;
       const params = [answers.department, answers.managerFirstName, answers.managerLastName];
-      db.query(sql, params, (err, rows) => {
-        // console.log(`
-        //   VIEWING ALL DEPARTMENTS:
-        // `);
-        // console.table(rows);
-      });
+      db.query(sql, params, (err, rows) => {});
+    })
+    .then(start);
+}
+
+function addRole() {
+  inquirer
+    .prompt([
+      {
+        name: "roleTitle",
+        type: "input",
+        message: "What is the title of the role? (required)",
+      },
+      {
+        name: "roleSalary",
+        type: "input",
+        message: "What is the role's salary? (required)",
+      },
+      {
+        name: "departmentId",
+        type: "input",
+        message: "What is the department id for the role? (required)",
+      },
+    ])
+    .then((answers) => {
+      console.log(answers);
+      const sql = `INSERT INTO role (title, salary, department_id)
+                    VALUES (?,?,?);
+                    ;`;
+      const params = [answers.roleTitle, answers.roleSalary, answers.departmentId];
+      db.query(sql, params, (err, rows) => {});
     })
     .then(start);
 }
