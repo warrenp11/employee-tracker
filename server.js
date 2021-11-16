@@ -5,23 +5,14 @@ const inquirer = require("inquirer");
 const cTable = require("console.table");
 
 const mainPrompt = {
-  // view all departments
   viewAllDepartments: "View All Departments",
-  // view all roles,
   viewAllRoles: "View All Roles",
-  // view all employees,
   viewAllEmployees: "View All Employees",
-  // add a department,
   addDepartment: "Add A Deprtment",
-  // add a role,
   addRole: "Add A Role",
-  // add an employee,
   addEmployee: "Add An Employee",
-  // update an employee role,
-  updateEmployeeRole: "Update Employee Role",
-  // remove an employee,
-  removeEmployee: "Remove An Employee",
-  //exit
+  // updateEmployeeRole: "Update Employee Role",
+  // removeEmployee: "Remove An Employee",
   exit: "Exit",
 };
 
@@ -38,8 +29,8 @@ function start() {
         mainPrompt.addDepartment,
         mainPrompt.addRole,
         mainPrompt.addEmployee,
-        mainPrompt.updateEmployeeRole,
-        mainPrompt.removeEmployee,
+        // mainPrompt.updateEmployeeRole,
+        // mainPrompt.removeEmployee,
         mainPrompt.exit,
       ],
     })
@@ -65,12 +56,10 @@ function start() {
         case mainPrompt.addEmployee:
           addEmployee();
           break;
-        case mainPrompt.updateEmployeeRole:
-          // run function
-          break;
-        case mainPrompt.removeEmployee:
-          // run function
-          break;
+        // case mainPrompt.updateEmployeeRole:
+        //   break;
+        // case mainPrompt.removeEmployee:
+        //   break;
         case mainPrompt.exit:
           db.end();
           break;
@@ -79,8 +68,6 @@ function start() {
 }
 
 start();
-
-// FUNCTIONS BELOW HERE
 
 function addDepartment() {
   inquirer
@@ -105,7 +92,11 @@ function addDepartment() {
       console.log(answers);
       const sql = `INSERT INTO department (department_name, manager_f_name, manager_l_name)
                     VALUES (?,?,?)`;
-      const params = [answers.department, answers.managerFirstName, answers.managerLastName];
+      const params = [
+        answers.department,
+        answers.managerFirstName,
+        answers.managerLastName,
+      ];
       db.query(sql, params, (err, rows) => {});
     })
     .then(start());
@@ -134,7 +125,11 @@ function addRole() {
       console.log(answers);
       const sql = `INSERT INTO role (title, salary, department_id)
                     VALUES (?,?,?)`;
-      const params = [answers.roleTitle, answers.roleSalary, answers.departmentId];
+      const params = [
+        answers.roleTitle,
+        answers.roleSalary,
+        answers.departmentId,
+      ];
       db.query(sql, params, (err, rows) => {});
     })
     .then(start());
@@ -149,34 +144,37 @@ function addEmployee() {
       {
         name: "employeeFirstName",
         type: "input",
-        message: "What is the employee's first name? (required)"
+        message: "What is the employee's first name? (required)",
       },
       {
         name: "employeeLastName",
         type: "input",
-        message: "What is the employee's last name? (required)"
+        message: "What is the employee's last name? (required)",
       },
       {
         name: "roleId",
         type: "input",
-        message: "What is the role id for this employee? (required)"
+        message: "What is the role id for this employee? (required)",
       },
       {
         name: "departmentId",
         type: "input",
-        message: "What is department id for this employee? (required)"
+        message: "What is department id for this employee? (required)",
       },
     ])
     .then((answers) => {
       const sql = `INSERT INTO employee (first_name, last_name, role_id, department_id)
                     VALUES (?,?,?,?)`;
-      const params = [answers.employeeFirstName, answers.employeeLastName, answers.roleId, answers.departmentId];
-      db.query(sql, params, (err, row) => {})
+      const params = [
+        answers.employeeFirstName,
+        answers.employeeLastName,
+        answers.roleId,
+        answers.departmentId,
+      ];
+      db.query(sql, params, (err, row) => {});
     })
     .then(start());
 }
-
-
 
 function viewAllDepartments() {
   const sql = `SELECT id, department_name FROM department`;
@@ -219,39 +217,6 @@ function viewAllEmployees() {
     start();
   });
 }
-
-// // // GET all employees
-// db.query(`SELECT * FROM employee`, (err, rows) => {
-//   console.log(rows);
-// });
-
-// // // GET a single employee
-// db.query(`SELECT * FROM employee WHERE id = 3`, (err, row) => {
-//   if (err) {
-//     console.log(err);
-//   }
-//   console.log(row);
-// });
-
-// // Create an employee
-// const sql = `INSERT INTO employee (id, first_name, last_name)
-//               VALUES (?,?,?)`;
-// const params = [10, "Mr.", "Yellow"];
-
-// db.query(sql, params, (err, result) => {
-//   if (err) {
-//     console.log(err);
-//   }
-//   console.log(result);
-// });
-
-// // DELETE an employee
-// db.query(`DELETE FROM employee WHERE id = ?`, 1, (err, result) => {
-//   if (err) {
-//     console.log(err);
-//   }
-//   console.log(result);
-// });
 
 db.connect((err) => {
   if (err) throw err;
