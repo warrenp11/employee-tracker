@@ -140,11 +140,11 @@ function addRole() {
     .then(start());
 }
 
-async function addEmployee() {
+function addEmployee() {
   console.log(`
       ADDING AN EMPLOYEE:
     `);
-  await inquirer
+  inquirer
     .prompt([
       {
         name: "employeeFirstName",
