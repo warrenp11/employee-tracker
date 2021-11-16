@@ -65,14 +65,17 @@ When you're ready to run the application, from the root directory enter either o
            node server.js
            npm start
 
-[Click Here]() to see a video demonstration of the application in use
+[Click Here](https://watch.screencastify.com/v/xWCCH1IOz538FYtmKcHs) to see a video demonstration of the application in use
 
 ## Tests
 
 ## Credits
 [Inquirer](https://www.npmjs.com/package/inquirer)
+
 [Dotenv](https://www.npmjs.com/package/dotenv)
+
 [MySQL](https://dev.mysql.com/)
+
 [Console.table](https://www.npmjs.com/package/console.table)
 
 
